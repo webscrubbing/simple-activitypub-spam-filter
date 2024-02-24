@@ -85,8 +85,8 @@ To insert the spam-filter into the communication path, change the port.
   mastodon-web:
     restart: always
     image: 'tootsuite/mastodon'
-    command: 'bundle exec rails s -p 3050' # 3050に変更
-    # すべての通信がDockerのDefaultネットワーク経由で流れるのでここでのポート開放は基本的に不要になる
+    command: 'bundle exec rails s -p 3050' # Change to 3050
+    # All POST flows through Docker's Default network, so opening ports here is basically unnecessary.
     # ports: 
     # - "3050:3050"
 ```
@@ -103,7 +103,7 @@ Add the image. Ensure the port matches the original Mastodon port, `3000`.
     - BLOCK_WORDS="THE_EXAMPLE_SPAM_URL.org,EXAMPLE_WORDS"
     - LISTEN_ADDRESS="0.0.0.0:3000"
     - WHEN_DETECT_SPAM="block"
-    - PROXY_TARGET="http://mastodon-web:3050" # serviceのキー名を指定
+    - PROXY_TARGET="http://mastodon-web:3050" # set service key name
 ```
 
 ### 3. Launch
