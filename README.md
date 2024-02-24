@@ -1,0 +1,1 @@
+# simple-activitypub-spam-filter
