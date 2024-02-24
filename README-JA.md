@@ -2,22 +2,20 @@
 
 [webscrubbing808/simple-activitypub-spam-filter - Docker Image | Docker Hub](https://hub.docker.com/r/webscrubbing808/simple-activitypub-spam-filter)
 
-[🗾日本語版READMEはこちら](https://github.com/webscrubbing/simple-activitypub-spam-filter/blob/main/README-JA.md)
-
-- A spam filter designed to address bot accounts using ActivityPub, such as those on Mastodon and Misskey.
-- Operates as a reverse proxy, activating when content contains certain strings.
-- Particularly effective against spam that mechanically posts specific URLs.
+- Mastodon/Misskey等ActivityPubを利用するBotアカウントに対応するためのスパムフィルターです
+- リバースプロキシとして動作し、コンテンツに任意の文字列が含まれている場合に動作します
+- 特定のURLを機械的に投稿するスパムに対し特に有効です
 
 ## Environment Values
-All configurations are managed via environment variables.
+すべての設定は環境変数により行います。
 
 **BLOCK_WORDS**
 ```
 BLOCK_WORDS=THE_EXAMPLE_SPAM_URL.org,EXAMPLE_WORDS
 ```
 
-- Specify words you want to block, separated by commas.
-- Searches the entire content of ActivityPub and blocks if there's an exact match.
+- ブロックしたいワードをカンマ区切りで指定します。
+- ActivityPubのコンテンツ内を全文検索し、完全一致するワードが含まれていた場合にブロック対象とします。
 
 **LISTEN_ADDRESS**
 ```
@@ -25,8 +23,8 @@ LISTEN_ADDRESS=:80
 LISTEN_ADDRESS=0.0.0.0:8080
 ```
 
-- Designates the address to listen for incoming connections from other servers.
-- Can be specified by port or address.
+- 他のサーバーからの通信を待ち受けるアドレスを指定します。
+- ポート単位でもアドレス単位でも利用できます。
 
 **WHEN_DETECT_SPAM**
 ```
@@ -34,9 +32,9 @@ WHEN_DETECT_SPAM=output
 WHEN_DETECT_SPAM=block
 ```
 
-- Defines the action to take upon detecting spam.
-- `output`: If spam is detected, the content is output to standard output and the delivery continues.
-- `block`: If spam is detected, sends a 400 to the originating server and stops the delivery.
+- スパムを検知したときにどのような動作を行うかを定義します。
+- `output`: スパムを検知した場合、標準出力にContentの内容を出力し配送は続けます。
+- `block`: スパムを検知した場合、配送元サーバーに400を送信し配送を取りやめます。
 
 **PROXY_TARGET**
 ```
@@ -45,15 +43,15 @@ PROXY_TARGET=http://mastodon:8080
 PROXY_TARGET=http://your-mastodon-apache.mastodon.svc.cluster.local
 ```
 
-- Specifies the server address where the delivery will be made.
-- Refer to the usage instructions below for detailed configuration methods.
+- 配送を行うサーバーのアドレスを指定します。
+- 詳しい設定方法は下記の利用方法を参照してください。
 
-## Usage
-The spam filter functions as a reverse proxy. Please insert the image between the network entrance and your Mastodon or Misskey server.
+## 利用方法
+スパムフィルターはリバースプロキシとして動作します。ネットワークの入り口とMastodonサーバー・Misskeyサーバーの間にイメージを追加してください。
 
-## Using with Docker Compose
+## Docker Composeで利用する場合
 
-Here is a sample for operating with the following configuration:
+下記のような構成で運用している場合のサンプルです。
 
 ```
 services:
@@ -78,8 +76,8 @@ services:
     command: 'bundle exec sidekiq'
 ```
 
-### 1. Change the Mastodon Port
-To insert the spam-filter into the communication path, change the port.
+### 1. MastodonのPortを変更する
+spam-filterを通信経路に差し込むために、ポートを変更します。
 
 ```
   mastodon-web:
@@ -91,8 +89,8 @@ To insert the spam-filter into the communication path, change the port.
     # - "3050:3050"
 ```
 
-### 2. Add the spam-filter
-Add the image. Ensure the port matches the original Mastodon port, `3000`.
+### 2. spam-filterを追加する
+イメージを追加します。ポートが元のMastodonのものである `3000` と一致するようにします。
 
 ```
   spam-filter:
@@ -106,14 +104,13 @@ Add the image. Ensure the port matches the original Mastodon port, `3000`.
     - PROXY_TARGET="http://mastodon-web:3050" # serviceのキー名を指定
 ```
 
-### 3. Launch
-
+### 3. 起動する
 ```
 > docker compose up -d
 > docker compose logs -f
 ```
 
-## Using with Kubernetes
+## Kubernetesで利用する場合
 ```
 apiVersion: apps/v1
 kind: Deployment
@@ -156,11 +153,11 @@ spec:
     type: ClusterIP
 ```
 
-Applying the above and swapping the target service with Ingress is recommended.
+上記を適応し、Ingressで対象のサービスを差し替えるのがよいと思われます。
 
 ## Issue && Pull Request
 
-Welcome. Better spam check methods and documentation improvements are needed.
+Welcome よりよいスパムチェック方法や、ドキュメントの改善などが必要です。
 
 ## License
 
