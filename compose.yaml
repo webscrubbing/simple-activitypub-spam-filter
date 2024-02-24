@@ -1,0 +1,11 @@
+# this is an example compose file
+services:
+  spam-filter:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - BLOCK_WORDS="THE_EXAMPLE_SPAM_URL.org,EXAMPLE_WORDS"
+      - LISTEN_ADDRESS="0.0.0.0:8080"
+      - WHEN_DETECT_SPAM="block"
+      - PROXY_TARGET="https://example_my_mastodon_server"
