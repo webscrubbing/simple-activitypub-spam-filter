@@ -32,11 +32,13 @@ LISTEN_ADDRESS=0.0.0.0:8080
 ```
 WHEN_DETECT_SPAM=output
 WHEN_DETECT_SPAM=block
+WHEN_DETECT_SPAM=soft
 ```
 
 - Defines the action to take upon detecting spam.
 - `output`: If spam is detected, the content is output to standard output and the delivery continues.
 - `block`: If spam is detected, sends a 400 to the originating server and stops the delivery.
+- `soft`: If spam is detected, send a 200 to the origin server and cancel the delivery. This is useful to prevent redelivery.
 
 **PROXY_TARGET**
 ```

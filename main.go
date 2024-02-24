@@ -46,8 +46,8 @@ func main() {
 	proxyUrl, _ := url.Parse(target)
 
 	whenDetectSpam := os.Getenv("WHEN_DETECT_SPAM")
-	if whenDetectSpam == "" || (whenDetectSpam != "block" && whenDetectSpam != "output") {
-		fmt.Println("Environment variable WHEN_DETECT_SPAM is not set. Please set it to block or report")
+	if whenDetectSpam == "" || (whenDetectSpam != "block" && whenDetectSpam != "output" && whenDetectSpam != "soft") {
+		fmt.Println("Environment variable WHEN_DETECT_SPAM is not set. Please set it to \"block\", \"soft\" or \"output\"")
 		os.Exit(1)
 	}
 
@@ -88,6 +88,9 @@ func main() {
 			fmt.Println("Spam detected: ", activity.Object.Content)
 			if whenDetectSpam == "block" {
 				http.Error(w, "Spam detected", http.StatusForbidden)
+			} else if whenDetectSpam == "soft" {
+				// Soft block to avoid spam and prevent redelivery
+				w.WriteHeader(http.StatusOK)
 			} else {
 				proxy.ServeHTTP(w, req)
 			}

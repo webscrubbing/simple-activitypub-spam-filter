@@ -1,7 +1,7 @@
 # this is an example compose file
 services:
   spam-filter:
-    build: .
+    image: docker.io/webscrubbing808/simple-activitypub-spam-filter:v0.1.0
     ports:
       - "8080:8080"
     environment:

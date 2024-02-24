@@ -30,11 +30,13 @@ LISTEN_ADDRESS=0.0.0.0:8080
 ```
 WHEN_DETECT_SPAM=output
 WHEN_DETECT_SPAM=block
+WHEN_DETECT_SPAM=soft
 ```
 
 - スパムを検知したときにどのような動作を行うかを定義します。
 - `output`: スパムを検知した場合、標準出力にContentの内容を出力し配送は続けます。
-- `block`: スパムを検知した場合、配送元サーバーに400を送信し配送を取りやめます。
+- `block`: スパムを検知した場合、配送元サーバーに400を送信し配送を取りやめます。送信元サーバーにスパムを送信していることを通知できます。
+- `soft`: スパムを検知した場合、配送元サーバーに200を送信し配送を取りやめます。再送を防ぐのに有効です。
 
 **PROXY_TARGET**
 ```
@@ -94,7 +96,7 @@ spam-filterを通信経路に差し込むために、ポートを変更します
 
 ```
   spam-filter:
-    image: webscrubbing808/simple-activitypub-spam-filter
+    image: webscrubbing808/simple-activitypub-spam-filter:v0.1.0
     ports: 
     - "3000:3000"
     environment:
